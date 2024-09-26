@@ -3,8 +3,8 @@ import { computed } from 'vue';
 
 interface Props {
   label: string,
-  outline: boolean,
-  disabled: boolean
+  outline?: boolean,
+  disabled?: boolean
 }
 const props = defineProps<Props>()
 const btnClasses = computed<string>(() => {
@@ -18,5 +18,8 @@ const btnClasses = computed<string>(() => {
 </script>
 
 <template>
-  <button :class="[btnClasses, props.disabled ? 'cursor-not-allowed' : '']" :disabled="props.disabled" class="rounded-md px-2.5 py-2">Button</button>
+  <button
+    :class="[btnClasses, props.disabled ? 'cursor-not-allowed' : '']"
+    :disabled="props.disabled"
+    class="rounded-md px-2.5 py-2">{{props.label}}</button>
 </template>
