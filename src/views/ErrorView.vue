@@ -8,6 +8,6 @@ const router = useRouter()
     <img width="20%" src="../assets/imgs/error-404.png">
     <div class="text-xl">OPPS...!!!!</div>
     <div>We should go back.</div>
-    <AppBtn label="Go home" @click="router.push({name: 'home'})"/>
+    <AppBtn label="Go home" @click="router.push({name: 'users'})"/>
   </div>
 </template>

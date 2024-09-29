@@ -15,7 +15,7 @@ const props = defineProps<Props>()
 </script>
 <template>
   <div class="flex items-center gap-x-2">
-    <RouterLink :to="{name: 'home'}">
+    <RouterLink :to="{name: 'users'}">
       <HomeIcon/>
     </RouterLink>
     <RouterLink

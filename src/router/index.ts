@@ -1,5 +1,4 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import UsersView from "../views/UsersView.vue";
 import UserDetailsView from "../views/UserDetailsView.vue";
 import UserDetailsModalView from "../views/UserDetailsModalView.vue";
@@ -16,9 +15,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
       redirect: {name: 'users'},
-      component: HomeView,
       children: []
     },
     {
