@@ -17,14 +17,15 @@ const user = ref<User>({
   email: '',
   age: null
 })
-function test() {
+function hideModal() {
   router.go(-1)
 }
+
 </script>
 
 <template>
   <main>
-    <AppModal @update:model-value="test" title="Create User" description="Description" v-model="modal">
+    <AppModal @update:model-value="hideModal" title="Create User" description="Description" v-model="modal">
       <div>
         <AppInput class="mb-8" label="Name" v-model="user.name"/>
         <AppInput class="mb-8" label="Email" v-model="user.email"/>

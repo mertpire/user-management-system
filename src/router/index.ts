@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import UsersView from "../views/UsersView.vue";
-import UserCreateView from "../views/UserCreateView.vue";
+import UserDetailsView from "../views/UserDetailsView.vue";
+import UserDetailsModalView from "../views/UserDetailsModalView.vue";
 import ErrorView from "../views/ErrorView.vue";
 declare module 'vue-router' {
   interface Crumb {
@@ -15,7 +16,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      redirect: '/users',
+      // redirect: '/users',
       component: HomeView,
       children: []
     },
@@ -26,13 +27,27 @@ const router = createRouter({
       component: UsersView,
       children: [
         {
-          path: 'create',
-          name: 'users-create',
+          path: ':id',
+          name: 'user-details-modal',
+          beforeEnter: (to, from, next) => {
+            if (!from.name) {
+              next({name: 'user-details', params: to.params})
+            }else {
+              next()
+            }            
+          },
           meta: { breadcrumbs: [{label: 'Users',link: 'users'},{label: 'Create'}] },
-          component: UserCreateView,
+          component: UserDetailsModalView,
           children: []
         },
       ]
+    },
+    {
+      path: '/users/:id',
+      name: 'user-details',
+      meta: { breadcrumbs: [{label: 'Users',link: 'users'},{label: 'Create'}] },
+      component: UserDetailsView,
+      children: []
     },
     
     { path: '/:pathMatch(.*)*', name: 'not-found', component: ErrorView },
