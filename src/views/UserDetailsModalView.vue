@@ -1,22 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import AppModal from "../components/modal/AppModal.vue";
-import AppInput from "../components/input/AppInput.vue";
 import { useRouter } from 'vue-router';
+import AppModal from "../components/modal/AppModal.vue";
+import UserDetailsForm from './UserDetailsForm.vue';
 
 const router = useRouter()
 
-interface User {
-  name: string
-  email: string
-  age: number | null
-}
 const modal = ref<boolean>(true)
-const user = ref<User>({
-  name: '',
-  email: '',
-  age: null
-})
+
 function hideModal() {
   router.go(-1)
 }
@@ -26,11 +17,7 @@ function hideModal() {
 <template>
   <main>
     <AppModal @update:model-value="hideModal" title="Create User" description="Description" v-model="modal">
-      <div>
-        <AppInput class="mb-8" label="Name" v-model="user.name"/>
-        <AppInput class="mb-8" label="Email" v-model="user.email"/>
-        <AppInput class="mb-8" label="Age" v-model="user.age"/>
-      </div>
+      <UserDetailsForm/>
     </AppModal>
   </main>
 </template>

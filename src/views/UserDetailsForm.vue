@@ -1,35 +1,65 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { useRoute } from 'vue-router';
-
+import { useRoute, useRouter } from 'vue-router';
+import UserService from "../services/user";
 import AppInput from "@/components/input/AppInput.vue";
 import AppBtn from '@/components/btn/AppBtn.vue';
 
 
 interface User {
+  id: number
   name: string
   email: string
-  age: number | null
+  age: number
 }
 const user = ref<User>({
+  id: Date.now(),
   name: '',
   email: '',
-  age: null
+  age: 0
 })
 
 const route = useRoute()
+const router = useRouter()
+
 const editMode = computed(()=> {
   return !isNaN(Number(route.params.id)) 
 })
+const routeId = computed<number>(()=> {
+  return Number(route.params.id)
+})
 
-const emit = defineEmits(['submit'])
 function submit(e:Event) {
   e.preventDefault()
-  let event = 'create' 
   if (editMode.value) {
-    event = 'update'
+    updateUser()
+  }else {
+    createUser()
   }
-  emit('submit', event)
+  
+}
+function updateUser() {
+  UserService.updateUser(user.value)
+  .then(()=> {
+    getUserById()
+  })
+}
+function createUser() {
+  UserService.createUser(user.value)
+  .then(res => {
+    router.replace({name: route.name, params: {id: res.data.id}})
+    getUserById()
+  })
+}
+function getUserById() {
+  UserService.getUserById(routeId.value)
+  .then(res => {
+    user.value = res.data
+  })
+}
+
+if (editMode.value) {
+  getUserById() 
 }
 </script>
 
@@ -39,7 +69,7 @@ function submit(e:Event) {
     <AppInput class="mb-8" label="Email" v-model="user.email"/>
     <AppInput class="mb-8" label="Age" v-model="user.age"/>
     <div class="text-right">
-      <AppBtn type="submit" label="Create"/>
+      <AppBtn type="submit" :label="editMode ? 'Update' : 'Create'"/>
     </div>
   </form>
 </template>
