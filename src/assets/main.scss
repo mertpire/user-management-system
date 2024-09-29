@@ -3,26 +3,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-
-// #app {
-// max-width: 1280px;
-// margin: 0 auto;
-// padding: 2rem;
-// font-weight: normal;
-// }
-
-button,
-input {
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 500;
-}
-
-@font-face {
-  font-family: "Inter", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 500;
-  font-style: normal;
-  src: url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-}
