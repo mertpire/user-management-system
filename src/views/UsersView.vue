@@ -2,37 +2,18 @@
 import { useRoute, useRouter } from 'vue-router';
 import AppBreadcrumbs from "../components/breadcrumbs/AppBreadcrumbs.vue";
 import AppBtn from "../components/btn/AppBtn.vue";
-import UserService from "../services/user";
-import { ref } from 'vue';
+import { useUserStore } from "@/stores/user";
+
+const userStore = useUserStore()
+
 const route = useRoute() 
 const router = useRouter()
 
 function editUser(id:number | string) {
   router.push({name: 'user-details-modal',params: {id}})
 }
-function deleteUser(id:number) {
-  UserService.deleteUser(id)
-  .then(()=> {
-    getUsers()
-  })
-}
-const loading = ref<boolean>(false)
-const users = ref<any>([])
-async function getUsers() {
-  loading.value = true
-  UserService.getUsers()
-  .then(res => {
-    users.value = res.data
-  })
-  .catch(err => {
-    console.log(err);
-  })
-  .finally(() => {
-    loading.value = false
-  })
-  
-}
-getUsers()
+
+userStore.getUsers()
 
 </script>
 
@@ -44,7 +25,7 @@ getUsers()
     </div>
     <div class="overflow-auto">
       <div class="mt-14">
-        <table v-if="users.length > 0" class="w-full">
+        <table v-if="userStore.users.length > 0" class="w-full">
           <thead class="text-left bg-slate-100 text-slate-500">
             <tr>
               <th>Name</th>
@@ -54,21 +35,17 @@ getUsers()
             </tr>
           </thead>
           <tbody>
-            <tr v-for="user in users" :key="user.id">
+            <tr v-for="user in userStore.users" :key="user.id">
               <td>{{user.name}}</td>
               <td>{{user.email}}</td>
               <td>{{user.age}}</td>
               <td class="text-right">
                 <AppBtn class="mr-2.5" @click="editUser(user.id)" outline label="Edit"/>
-                <AppBtn @click="deleteUser(user.id)" outline label="Delete"/>
+                <AppBtn @click="userStore.deleteUser(user.id)" outline label="Delete"/>
               </td>
             </tr>
           </tbody>
         </table>
-        <div v-else class="text-center opacity-50">
-          <div v-if="loading">Loading...</div>
-          <div v-else>No Users Found</div>
-        </div>
       </div>
     </div>
     <router-view/>

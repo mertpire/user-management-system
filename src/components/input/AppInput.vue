@@ -6,6 +6,7 @@ interface Props {
   label: string,
   placeholder?: string,
   disabled?: boolean,
+  required?: boolean,
 }
 const props = defineProps<Props>()
 const emit = defineEmits(['update:modelValue'])
@@ -24,6 +25,7 @@ const inputClasses = computed<string>(() => {
     <input
       :class="[inputClasses, props.disabled ? 'cursor-not-allowed' : '']"
       :disabled="props.disabled"
+      required
       :placeholder="props.placeholder"
       :value="props.modelValue"
       @input="emit('update:modelValue', ($event.target as any).value)"
