@@ -7,10 +7,10 @@ interface Props {
   id: string
   label: string,
   placeholder?: string,
-  pattern?: string,
   disabled?: boolean,
   required?: boolean,
   type?: string
+  info?: string
 }
 const props = defineProps<Props>()
 const emit = defineEmits(['update:modelValue'])
@@ -23,14 +23,24 @@ const inputClasses = computed<string>(() => {
 
 <template>
   <label :for="id" class="text-slate-800">
-    <div class="flex items-center gap-x-1">{{ props.label }} <InfoIcon/></div>
+    <div class="flex items-center gap-x-1">
+      {{ props.label }} 
+    <div v-if="info" class="relative flex items-center group">
+      <InfoIcon/>
+      <div class="absolute left-0 flex items-center hidden ml-5 group-hover:flex">
+        <span class="relative z-10 p-2 text-xs leading-none text-slate-500 whitespace-nowrap bg-slate-100 shadow-lg">
+            {{info}}
+        </span>
+      </div>
+    </div>
+
+    </div>
     <input
       :class="[inputClasses, props.disabled ? 'cursor-not-allowed' : '']"
       :disabled="props.disabled"
       :type="type"
       :id="id"
       :required="required"
-      :pattern="pattern"
       :placeholder="props.placeholder"
       :value="props.modelValue"
       @input="emit('update:modelValue', ($event.target as any).value)"

@@ -81,8 +81,8 @@ onBeforeUnmount(()=> {
         {{ error }}      
       </div>
     </div>
-    <AppInput id="name" label="Name" pattern="" v-model="userStore.user.name"/>
-    <AppInput id="email" type="email" :pattern="emailRegExp" label="Email" v-model="userStore.user.email"/>
-    <AppInput id="age" type="number" label="Age" v-model="userStore.user.age"/>
+    <AppInput id="name" label="Name" v-model="userStore.user.name"/>
+    <AppInput placeholder="email@domain.com" id="email" type="email" label="Email" v-model="userStore.user.email"/>
+    <AppInput id="age" info="Age must between 0 and 99." type="number" label="Age" v-model="userStore.user.age"/>
   </AppForm>
 </template>
