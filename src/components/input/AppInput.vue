@@ -34,10 +34,7 @@ const inputClasses = computed<string>(() => {
       :placeholder="props.placeholder"
       :value="props.modelValue"
       @input="emit('update:modelValue', ($event.target as any).value)"
-      class="rounded-md min-w-64 px-2.5 py-2 mt-2 w-full peer invalid:[&:not(:placeholder-shown):not(:focus)]:border-rose-500" />
-      <span class="mt-2 hidden text-xs text-rose-500 peer-[&:not(:placeholder-shown):not(:focus):invalid]:block">
-        Please enter a valid {{label.toLowerCase()}}
-      </span>
+      class="rounded-md min-w-64 px-2.5 py-2 mt-2 w-full" />
   </label>
   
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount } from 'vue';
+import { computed, onBeforeUnmount, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from "@/stores/user";
 import AppInput from "@/components/input/AppInput.vue";
@@ -17,12 +17,37 @@ const routeId = computed<string>(()=> {
   return route.params.id.toString()
 })
 function submit() {
+  validateForm()
+  if (errors.value.length > 0) {
+    return
+  }
   if (editMode.value) {
     updateUser()
   }else {
     createUser()
   }
   
+}
+const errors = ref<string[]>([])
+function validateForm() {
+  errors.value = []
+  if (!userStore.user.name) {
+    errors.value.push("Name is required.")
+  }
+  if(!userStore.user.email){
+    errors.value.push("Email is required.")
+  }else if(!validateEmail(userStore.user.email)){
+    errors.value.push("A valid email is required.")
+  }
+  if (!userStore.user.age) {
+    errors.value.push("Age is required.")
+  }else if(!(userStore.user.age >= 0 && userStore.user.age < 100)){
+    errors.value.push("A valid age is required.")
+  }
+}
+const emailRegExp = ref<any>(/^[a-zA-Z0-9]+([._%+-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+function validateEmail(email:string) {
+  return emailRegExp.value.test(email)
 }
 function updateUser() {
   userStore.updateUser(userStore.user)
@@ -51,8 +76,13 @@ onBeforeUnmount(()=> {
 
 <template>
   <AppForm @submit="submit" :btn-label="editMode ? 'Update' : 'Create'">
-    <AppInput id="name" label="Name" v-model="userStore.user.name"/>
-    <AppInput id="email" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" label="Email" v-model="userStore.user.email"/>
-    <AppInput id="age" label="Age" v-model="userStore.user.age"/>
+    <div class="text-rose-500" v-if="errors.length > 0">
+      <div v-for="error in errors" :key="error">
+        {{ error }}      
+      </div>
+    </div>
+    <AppInput id="name" label="Name" pattern="" v-model="userStore.user.name"/>
+    <AppInput id="email" type="email" :pattern="emailRegExp" label="Email" v-model="userStore.user.email"/>
+    <AppInput id="age" type="number" label="Age" v-model="userStore.user.age"/>
   </AppForm>
 </template>
