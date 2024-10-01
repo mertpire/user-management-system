@@ -13,7 +13,7 @@ export const useUserStore = defineStore('user', {
         id: '0',
         name: '',
         email: '',
-        age: 0
+        age: null
       },
     }
   },
@@ -39,7 +39,7 @@ export const useUserStore = defineStore('user', {
       try {
         const res = await axiosInstance.post(`/users`, user)
         this.user = res.data
-        this.users.splice(this.getIndexOfUser(user.id), 0, res.data)
+        this.users.push(res.data)
       } catch (error) {
         console.log(error);
       }
@@ -71,5 +71,5 @@ interface UserInfo {
   id: string,
   name: string,
   email: string,
-  age: number
+  age: number | null
 }

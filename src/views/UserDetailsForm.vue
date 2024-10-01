@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onBeforeUnmount } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from "@/stores/user";
 import AppInput from "@/components/input/AppInput.vue";
-import AppBtn from '@/components/btn/AppBtn.vue';
+import AppForm from "@/components/form/AppForm.vue";
 
 
 const route = useRoute()
@@ -16,7 +16,6 @@ const editMode = computed(()=> {
 const routeId = computed<string>(()=> {
   return route.params.id.toString()
 })
-
 function submit() {
   if (editMode.value) {
     updateUser()
@@ -37,7 +36,7 @@ function initUser() {
     id: '0',
     name: '',
     email: '',
-    age: 0
+    age: null
   }
 }
 if (editMode.value) {
@@ -45,15 +44,15 @@ if (editMode.value) {
 }else {
   initUser()
 }
+onBeforeUnmount(()=> {
+  initUser()
+})
 </script>
 
 <template>
-  <form @submit.prevent="submit">
-    <AppInput required class="mb-8" label="Name" v-model="userStore.user.name"/>
-    <AppInput class="mb-8" label="Email" v-model="userStore.user.email"/>
-    <AppInput class="mb-8" label="Age" v-model="userStore.user.age"/>
-    <div class="text-right">
-      <AppBtn type="submit" :label="editMode ? 'Update' : 'Create'"/>
-    </div>
-  </form>
+  <AppForm @submit="submit" :btn-label="editMode ? 'Update' : 'Create'">
+    <AppInput id="name" label="Name" v-model="userStore.user.name"/>
+    <AppInput id="email" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" label="Email" v-model="userStore.user.email"/>
+    <AppInput id="age" label="Age" v-model="userStore.user.age"/>
+  </AppForm>
 </template>
