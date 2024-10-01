@@ -11,9 +11,9 @@ const emit = defineEmits(['submit'])
 </script>
 
 <template>
-  <form novalidate @submit.prevent="emit('submit')" class="flex flex-col gap-8">
+  <form novalidate @submit.prevent="emit('submit')" class="flex flex-col gap-6">
     <slot/>
-    <div class="text-right">
+    <div class="text-right mt-4">
       <AppBtn type="submit" :loading="btnLoading" :label="props.btnLabel"/>
     </div>
   </form>
