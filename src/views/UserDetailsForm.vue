@@ -16,6 +16,8 @@ const editMode = computed(()=> {
 const routeId = computed<string>(()=> {
   return route.params.id.toString()
 })
+
+const loading = ref<boolean>(false)
 function submit() {
   validateForm()
   if (errors.value.length > 0) {
@@ -49,11 +51,15 @@ const emailRegExp = ref<any>(/^[a-zA-Z0-9]+([._%+-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9.-]
 function validateEmail(email:string) {
   return emailRegExp.value.test(email)
 }
-function updateUser() {
-  userStore.updateUser(userStore.user)
+async function updateUser() {
+  loading.value = true
+  await userStore.updateUser(userStore.user)
+  loading.value = false
 }
 async function createUser() {
+  loading.value = true
   await userStore.createUser(userStore.user)
+  loading.value = false
   router.replace({name: route.name, params: {id: userStore.user.id}})
 }
 function initUser() {
@@ -75,7 +81,7 @@ onBeforeUnmount(()=> {
 </script>
 
 <template>
-  <AppForm @submit="submit" :btn-label="editMode ? 'Update' : 'Create'">
+  <AppForm @submit="submit" :btn-loading="loading" :btn-label="editMode ? 'Update' : 'Create'">
     <div class="text-rose-500" v-if="errors.length > 0">
       <div v-for="error in errors" :key="error">
         {{ error }}      

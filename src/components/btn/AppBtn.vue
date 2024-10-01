@@ -6,6 +6,7 @@ interface Props {
   outline?: boolean
   disabled?: boolean
   flat?: boolean
+  loading?: boolean
 }
 const props = defineProps<Props>()
 const btnClasses = computed<string>(() => {
@@ -26,8 +27,12 @@ const btnClasses = computed<string>(() => {
   <button
     :class="[btnClasses, props.disabled ? 'cursor-not-allowed' : '']"
     :disabled="props.disabled"
-    class="rounded-md px-2.5 py-2">
-    {{props.label}}
+    class="rounded-md px-2.5 py-2 ">
+    <div class="flex gap-2">
+      <div v-if="loading" class="animate-spin inline-block size-4 border-[2px] border-current border-t-transparent text-white-600 rounded-full dark:text-white-500" role="status" aria-label="loading">
+      </div>
+      {{loading ? 'Processing...' : props.label}}
+    </div>
     <slot/>
     </button>
 </template>
