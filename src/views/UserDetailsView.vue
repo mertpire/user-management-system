@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import AppBtn from '@/components/btn/AppBtn.vue';
 import AppBreadcrumbs from '@/components/breadcrumbs/AppBreadcrumbs.vue';
@@ -7,10 +6,6 @@ import UserForm from './UserDetailsForm.vue'
 const route = useRoute()
 const router = useRouter()
 
-function submit() {
-  console.log('submitted');
-  
-}
 </script>
 
 <template>
@@ -19,6 +14,6 @@ function submit() {
       <AppBreadcrumbs :crumbs="route.meta.breadcrumbs"/>
       <AppBtn @click="router.go(-1)" label="Back"/>
     </div>
-    <UserForm @submit="submit"/>
+    <UserForm/>
   </div>
 </template>
