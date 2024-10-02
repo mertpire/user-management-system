@@ -22,7 +22,7 @@ describe("AppBtn", () => {
   });
   test("renders the correct style for outline", () => {
     const wrapper = mount(AppBtn, { props: { outline: true } })
-    const classes = 'rounded-md px-2.5 py-2 bg-white hover:bg-slate-50 active:bg-slate-100 border-slate-300'
+    const classes = 'rounded-md px-2.5 py-2 bg-white border hover:bg-slate-50 active:bg-slate-100 border-slate-300'
     
     expect(wrapper.classes()).toEqual(
       expect.arrayContaining(classes.split(' '))
