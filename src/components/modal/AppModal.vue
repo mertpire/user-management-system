@@ -30,7 +30,7 @@ function closeModal() {
           </div>
         </div>
         <slot v-else name="title"/>
-        <AppBtn flat class="self-start" @click="closeModal">
+        <AppBtn flat dense class="self-start" @click="closeModal">
           <CloseIcon/>
         </AppBtn>
       </div>
