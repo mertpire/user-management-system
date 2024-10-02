@@ -20,7 +20,7 @@ const btnClasses = computed<string[]>(() => {
   }
   else {
     if(props.dense) classes.push('px-1 py-1')
-    if (props.outline) classes.push('bg-white hover:bg-slate-50 active:bg-slate-100 border-slate-300 border')
+    if (props.outline) classes.push('bg-white hover:bg-slate-50 active:bg-slate-100 border-slate-300')
     else if(props.flat) classes.push('text-gray-300')
     else classes.push('text-white bg-slate-800 hover:bg-slate-900 active:bg-slate-950')
   }
