@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import AppBreadcrumbs from "../components/breadcrumbs/AppBreadcrumbs.vue";
 import AppBtn from "@/components/btn/AppBtn.vue";
 import AppModal from "@/components/modal/AppModal.vue";
@@ -8,7 +8,6 @@ import { ref } from 'vue';
 
 const userStore = useUserStore()
 
-const route = useRoute() 
 const router = useRouter()
 const loading = ref<boolean>(false)
 function editUser(id:number | string) {
@@ -32,7 +31,7 @@ userStore.getUsers()
 <template>
   <main>
     <div class="flex justify-between">
-      <AppBreadcrumbs :crumbs="route.meta.breadcrumbs as any"/>
+      <AppBreadcrumbs/>
       <AppBtn @click="editUser('create')" label="Create User"/>
     </div>
     <div class="overflow-auto">

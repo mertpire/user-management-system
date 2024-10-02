@@ -3,12 +3,6 @@ import UsersView from "../views/UsersView.vue";
 import UserDetailsView from "../views/UserDetailsView.vue";
 import UserDetailsModalView from "../views/UserDetailsModalView.vue";
 import ErrorView from "../views/ErrorView.vue";
-declare module 'vue-router' {
-  interface Crumb {
-    label: string,
-    link?: string
-  }
-}
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -34,7 +28,7 @@ const router = createRouter({
               next()
             }            
           },
-          meta: { breadcrumbs: [{label: 'Users',link: 'users'},{label: 'Create'}] },
+          meta: { breadcrumbs: [{label: 'Users',link: 'users'}] },
           component: UserDetailsModalView,
           children: []
         },
@@ -43,7 +37,7 @@ const router = createRouter({
     {
       path: '/users/:id',
       name: 'user-details',
-      meta: { breadcrumbs: [{label: 'Users',link: 'users'},{label: 'Create'}] },
+      meta: { breadcrumbs: [{label: 'Users',link: 'users'}, {label: '[id]'}] },
       component: UserDetailsView,
       children: []
     },
