@@ -14,7 +14,7 @@ const emit = defineEmits(['submit'])
   <form novalidate @submit.prevent="emit('submit')" class="flex flex-col gap-6">
     <slot/>
     <div class="text-right mt-4">
-      <AppBtn type="submit" :loading="btnLoading" :label="props.btnLabel"/>
+      <AppBtn type="submit" :disabled="btnLoading" :loading="btnLoading" :label="props.btnLabel"/>
     </div>
   </form>
 </template>
