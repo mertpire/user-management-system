@@ -11,8 +11,8 @@ const breadcrumbs = computed<any>(()=>{
   return typeof route.meta.breadcrumbs === 'function' ? route.meta.breadcrumbs() : route.meta.breadcrumbs
 })
 function getCrumbLabel(label:string) {  
-  if (label.toLowerCase().includes('[id]') && !isNaN(Number(route.params.id))) {
-    return 'Edit'
+  if (label.toLowerCase().includes('[id]')) {
+    return isNaN(Number(route.params.id)) ? 'Create' : 'Edit'
   }else {
     return label
   }
