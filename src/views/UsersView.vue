@@ -4,7 +4,8 @@ import AppBreadcrumbs from "../components/breadcrumbs/AppBreadcrumbs.vue";
 import AppBtn from "@/components/btn/AppBtn.vue";
 import AppModal from "@/components/modal/AppModal.vue";
 import { useUserStore } from "@/stores/user";
-import { onBeforeMount, ref } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
+import SortIcon from '@/components/icons/SortIcon.vue';
 
 const userStore = useUserStore()
 
@@ -30,6 +31,33 @@ onBeforeMount(async ()=> {
   loading.value = false
 })
 
+const sortedUsers = computed<any>(()=> {
+  return [...userStore.users].sort((a:any, b:any) => {
+        const result = a[sortedBy.value] > b[sortedBy.value] ? 1 : -1;
+        return sortOrder.value === 'ascending' ? result : -result;
+      });
+})
+const sortOrder = ref<string>('ascending')
+const sortedBy = ref<string | number>('name')
+function sortBy(key:number | string, sortable:boolean) {
+  if (!sortable) {
+    return
+  }
+  
+  if (sortedBy.value === key) {
+    sortOrder.value = sortOrder.value === 'ascending' ? 'descending' : 'ascending';
+  } else {
+    sortedBy.value = key;
+    sortOrder.value = 'ascending';
+  }
+}
+const columns = ref<any>({
+  name: { label: 'Name', sortable: true },
+  email: { label: 'Email', sortable: true},
+  age: { label: 'Age', sortable: true},
+  action: { label: 'Action', align: 'right', sortable: false},
+
+})
 </script>
 
 <template>
@@ -40,17 +68,22 @@ onBeforeMount(async ()=> {
     </div>
     <div class="overflow-auto">
       <div class="mt-14">
-        <table v-if="userStore.users.length > 0" class="w-full">
+        <table v-if="sortedUsers.length > 0" class="w-full">
           <thead class="text-left bg-slate-100 text-slate-500">
             <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Age</th>
-              <th class="text-right">Action</th>
+              <th
+                v-for="(col, key) in columns"
+                :key="key"
+                :class="[`text-${col.align}`, col.sortable ? 'cursor-pointer' : '']"
+                @click="sortBy(key,col.sortable)"
+                class="group">
+                {{col.label}}
+                <SortIcon class="invisible group-hover:visible inline" v-if="col.sortable"/>
+              </th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="user in userStore.users" :key="user.id">
+            <tr v-for="user in sortedUsers" :key="user.id">
               <td>{{user.name}}</td>
               <td>{{user.email}}</td>
               <td>{{user.age}}</td>
