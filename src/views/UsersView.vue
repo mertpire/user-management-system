@@ -4,7 +4,7 @@ import AppBreadcrumbs from "../components/breadcrumbs/AppBreadcrumbs.vue";
 import AppBtn from "@/components/btn/AppBtn.vue";
 import AppModal from "@/components/modal/AppModal.vue";
 import { useUserStore } from "@/stores/user";
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 
 const userStore = useUserStore()
 
@@ -24,7 +24,11 @@ async function deleteUser() {
   loading.value = false
   confirmDeleteModal.value = false
 }
-userStore.getUsers()
+onBeforeMount(async ()=> {
+  loading.value = true
+  await userStore.getUsers()
+  loading.value = false
+})
 
 </script>
 
@@ -57,6 +61,10 @@ userStore.getUsers()
             </tr>
           </tbody>
         </table>
+        <div v-else class="text-center text-slate-500">
+          <div v-if="loading">Loading...</div>
+          <div v-else>No users found</div>
+        </div>
         <AppModal v-model="confirmDeleteModal" size="max-w-sm">
           <template #title>
             <div class="text-lg">
@@ -66,7 +74,7 @@ userStore.getUsers()
           <div class="text-sm opacity-70">This will permanently delete user from server.</div>
           <div class="text-right mt-10">
             <AppBtn class="mr-2" @click="confirmDeleteModal = false" outline label="Cancel"/>
-            <AppBtn @click="deleteUser" :loading="loading" label="Delete"/>
+            <AppBtn @click="deleteUser" :disabled="loading" :loading="loading" label="Delete"/>
           </div>
         </AppModal>
       </div>
