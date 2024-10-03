@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from "@/stores/user";
 import AppInput from "@/components/input/AppInput.vue";
@@ -9,12 +9,9 @@ import AppForm from "@/components/form/AppForm.vue";
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
-
+const emit = defineEmits(['update:description'])
 const editMode = computed(()=> {
   return !isNaN(Number(route.params.id)) 
-})
-const routeId = computed<string>(()=> {
-  return route.params.id.toString()
 })
 
 const loading = ref<boolean>(false)
@@ -47,7 +44,7 @@ function validateForm() {
     errors.value.push("A valid age is required.")
   }
 }
-const emailRegExp = ref<any>(/^[a-zA-Z0-9]+([._%+-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+const emailRegExp = ref<RegExp>(/^[a-zA-Z0-9]+([._%+-]?[a-zA-Z0-9]+)*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
 function validateEmail(email:string) {
   return emailRegExp.value.test(email)
 }
@@ -70,14 +67,17 @@ function initUser() {
     age: null
   }
 }
+
 if (editMode.value) {
-  userStore.getUserById(routeId.value) 
-}else {
+  if (userStore.users.length > 0) {
+    userStore.user = {...userStore.users.find(user => user.id === route.params.id) as any}
+    emit('update:description', userStore.user.name)
+  }else {
+    userStore.getUserById(route.params.id.toString())
+  }
+} else {
   initUser()
 }
-onBeforeUnmount(()=> {
-  initUser()
-})
 </script>
 
 <template>
