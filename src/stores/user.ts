@@ -3,6 +3,8 @@ import { axiosInstance } from "@/services/axios";
 interface State {
   users: UserInfo[]
   user: UserInfo
+  sortBy: string | null
+  order: string
 }
 
 export const useUserStore = defineStore('user', {
@@ -15,12 +17,15 @@ export const useUserStore = defineStore('user', {
         email: '',
         age: null
       },
+      sortBy: 'id',
+      order: 'asc'
+
     }
   },
   actions: {
     async getUsers() {
       try {
-        const res = await axiosInstance.get('/users')
+        const res = await axiosInstance.get(`/users?sortBy=${this.sortBy}&order=${this.order}`)
         this.users = res.data
       } catch (error) {
         console.log(error);

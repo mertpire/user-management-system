@@ -4,8 +4,10 @@ import AppBreadcrumbs from "../components/breadcrumbs/AppBreadcrumbs.vue";
 import AppBtn from "@/components/btn/AppBtn.vue";
 import AppModal from "@/components/modal/AppModal.vue";
 import { useUserStore } from "@/stores/user";
-import { computed, onBeforeMount, ref } from 'vue';
-import SortIcon from '@/components/icons/SortIcon.vue';
+import { onBeforeMount, ref } from 'vue';
+import ChevronUpDownIcon from '@/components/icons/ChevronUpDownIcon.vue';
+import ChevronDownIcon from '@/components/icons/ChevronDownIcon.vue';
+import ChevronUpIcon from '@/components/icons/ChevronUpIcon.vue';
 
 const userStore = useUserStore()
 
@@ -31,25 +33,24 @@ onBeforeMount(async ()=> {
   loading.value = false
 })
 
-const sortedUsers = computed<any>(()=> {
-  return [...userStore.users].sort((a:any, b:any) => {
-        const result = a[sortedBy.value] > b[sortedBy.value] ? 1 : -1;
-        return sortOrder.value === 'ascending' ? result : -result;
-      });
-})
-const sortOrder = ref<string>('ascending')
-const sortedBy = ref<string | number>('name')
-function sortBy(key:number | string, sortable:boolean) {
+function sortBy(colId:string, sortable:boolean) {
   if (!sortable) {
     return
   }
-  
-  if (sortedBy.value === key) {
-    sortOrder.value = sortOrder.value === 'ascending' ? 'descending' : 'ascending';
-  } else {
-    sortedBy.value = key;
-    sortOrder.value = 'ascending';
+  userStore.sortBy = colId
+  switch (userStore.order) {
+    case 'asc':
+      userStore.order = 'desc'
+      break;
+    case 'desc':
+      userStore.order = 'none'
+      userStore.sortBy = 'id'
+      break;
+    default:
+      userStore.order = 'asc'
+      break;
   }
+  userStore.getUsers() 
 }
 const columns = ref<any>({
   name: { label: 'Name', sortable: true },
@@ -68,22 +69,27 @@ const columns = ref<any>({
     </div>
     <div class="overflow-auto">
       <div class="mt-14">
-        <table v-if="sortedUsers.length > 0" class="w-full">
+        <div class="text-center text-slate-500" v-if="loading">Loading...</div>
+        <table v-else-if="userStore.users.length > 0" class="w-full">
           <thead class="text-left bg-slate-100 text-slate-500">
             <tr>
               <th
-                v-for="(col, key) in columns"
-                :key="key"
+                v-for="(col, colId) in columns"
+                :key="colId"
                 :class="[`text-${col.align}`, col.sortable ? 'cursor-pointer' : '']"
-                @click="sortBy(key,col.sortable)"
+                @click="sortBy(colId.toString(),col.sortable)"
                 class="group">
                 {{col.label}}
-                <SortIcon class="invisible group-hover:visible inline" v-if="col.sortable"/>
+                <span v-if="col.sortable">
+                  <ChevronUpIcon v-if="userStore.order === 'desc'" class="invisible group-hover:visible inline"/>
+                  <ChevronUpDownIcon v-else-if="userStore.order === 'none'" class="invisible group-hover:visible inline"/>
+                  <ChevronDownIcon v-if="userStore.order === 'asc'" class="invisible group-hover:visible inline"/>
+                </span>
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="user in sortedUsers" :key="user.id">
+            <tr v-for="user in userStore.users" :key="user.id">
               <td>{{user.name}}</td>
               <td>{{user.email}}</td>
               <td>{{user.age}}</td>
@@ -95,8 +101,7 @@ const columns = ref<any>({
           </tbody>
         </table>
         <div v-else class="text-center text-slate-500">
-          <div v-if="loading">Loading...</div>
-          <div v-else>No users found</div>
+          <div>No users found</div>
         </div>
         <AppModal v-model="confirmDeleteModal" size="max-w-sm">
           <template #title>

@@ -52,12 +52,13 @@ async function updateUser() {
   loading.value = true
   await userStore.updateUser(userStore.user)
   loading.value = false
+  router.push({name: 'users'})
 }
 async function createUser() {
   loading.value = true
   await userStore.createUser(userStore.user)
   loading.value = false
-  router.replace({name: route.name, params: {id: userStore.user.id}})
+  router.push({name: 'users'})
 }
 function initUser() {
   userStore.user = {
