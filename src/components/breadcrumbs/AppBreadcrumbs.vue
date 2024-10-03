@@ -8,11 +8,17 @@ import { RouterLink } from "vue-router";
 const route = useRoute() 
 
 const breadcrumbs = computed<any>(()=>{
+  // Get breadcrumb list from router
   return typeof route.meta.breadcrumbs === 'function' ? route.meta.breadcrumbs() : route.meta.breadcrumbs
 })
 function getCrumbLabel(label:string) {  
+  // Create and edit routes using same page component. 
+  // To decide create/edit label [id] (last key of route params) keyword used.
   if (label.toLowerCase().includes('[id]')) {
-    return isNaN(Number(route.params.id)) ? 'Create' : 'Edit'
+    const lastRouteParam = Object.values(route.params)[Object.keys(route.params).length - 1]
+    console.log(lastRouteParam);
+    
+    return isNaN(Number(lastRouteParam)) ? 'Create' : 'Edit'
   }else {
     return label
   }

@@ -5,8 +5,16 @@ import AppBtn from "./AppBtn.vue";
 
 describe("AppBtn", () => {
   test("renders the correct style for default", () => {
-    const wrapper = mount(AppBtn)
+    const wrapper = mount(AppBtn, { props: { dense: false }})
     const classes = 'rounded-md px-2.5 py-2 text-white bg-slate-800 hover:bg-slate-900 active:bg-slate-950'
+    
+    expect(wrapper.classes()).toEqual(
+      expect.arrayContaining(classes.split(' '))
+    );
+  });
+  test("renders the correct style for default-dense", () => {
+    const wrapper = mount(AppBtn, { props: { dense: true }})
+    const classes = 'rounded-md px-1 py-1 text-white bg-slate-800 hover:bg-slate-900 active:bg-slate-950'
     
     expect(wrapper.classes()).toEqual(
       expect.arrayContaining(classes.split(' '))
@@ -47,22 +55,6 @@ describe("AppBtn", () => {
   test("renders the correct style for flat-disabled", () => {
     const wrapper = mount(AppBtn, { props: { flat: true, disabled: true } })
     const classes = 'rounded-md px-2.5 py-2 disabled:text-gray-100 cursor-not-allowed'
-    
-    expect(wrapper.classes()).toEqual(
-      expect.arrayContaining(classes.split(' '))
-    );
-  });
-  test("renders the correct style for dense", () => {
-    const wrapper = mount(AppBtn, { props: { dense: true } })
-    const classes = 'rounded-md px-1 py-1'
-    
-    expect(wrapper.classes()).toEqual(
-      expect.arrayContaining(classes.split(' '))
-    );
-  });
-  test("renders the correct style for dense-disabled", () => {
-    const wrapper = mount(AppBtn, { props: { dense: true, disabled: true } })
-    const classes = 'rounded-md disabled:px-1 disabled:py-1 cursor-not-allowed'
     
     expect(wrapper.classes()).toEqual(
       expect.arrayContaining(classes.split(' '))

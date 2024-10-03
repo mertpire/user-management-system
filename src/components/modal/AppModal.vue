@@ -3,7 +3,7 @@ import AppBtn from "../btn/AppBtn.vue";
 import CloseIcon from "../icons/CloseIcon.vue";
 import PencilIcon from "../icons/PencilIcon.vue";
 interface Props {
-  modelValue: boolean
+  modelValue: boolean // Model of the component; can be used v-model directive
   title?: string
   description?: string,
   size?: string

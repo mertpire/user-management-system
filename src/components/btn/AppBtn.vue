@@ -2,16 +2,16 @@
 import { computed } from 'vue';
 
 interface Props {
-  label?: string
-  outline?: boolean
-  disabled?: boolean
-  flat?: boolean
-  dense?: boolean
-  loading?: boolean
+  label?: string // The text that will be shown on the button
+  outline?: boolean // Use 'outline' design
+  disabled?: boolean // Put component in disabled mode
+  flat?: boolean // Use 'flat' design
+  dense?: boolean // Dense mode; occupies less space
+  loading?: boolean // Put component in loading mode
 }
 const props = defineProps<Props>()
 const btnClasses = computed<string[]>(() => {
-  const classes = []
+  const classes:string[] = []
   if (props.disabled) {
     classes.push('cursor-not-allowed')
     if (props.outline) classes.push('border-slate-300 border disabled:text-slate-300')

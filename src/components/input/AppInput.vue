@@ -3,14 +3,14 @@ import InfoIcon from "@/components/icons/InfoIcon.vue";
 import { computed } from 'vue';
 
 interface Props {
-  modelValue: string | number | null,
-  id: string
-  label: string,
-  placeholder?: string,
-  disabled?: boolean,
-  required?: boolean,
-  type?: string
-  info?: string
+  modelValue: string | number | null, // Model of the component; can be used v-model directive
+  id: string // Id of input field
+  label: string, // A text label that will “float” up above the input field, once the field gets focus
+  placeholder?: string, // Placeholder of input field
+  disabled?: boolean, // Put component in disable mode
+  required?: boolean, // Put component in require mode
+  type?: string // Type of input field
+  info?: string // Hint about input field
 }
 const props = defineProps<Props>()
 const emit = defineEmits(['update:modelValue'])
