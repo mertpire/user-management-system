@@ -69,8 +69,7 @@ const columns = ref<any>({
     </div>
     <div class="overflow-auto">
       <div class="mt-14">
-        <div class="text-center text-slate-500" v-if="loading">Loading...</div>
-        <table v-else-if="userStore.users.length > 0" class="w-full">
+        <table v-if="userStore.users.length > 0" class="w-full">
           <thead class="text-left bg-slate-100 text-slate-500">
             <tr>
               <th
@@ -101,7 +100,8 @@ const columns = ref<any>({
           </tbody>
         </table>
         <div v-else class="text-center text-slate-500">
-          <div>No users found</div>
+          <div v-if="loading">Loading...</div>
+          <div v-else>No users found</div>
         </div>
         <AppModal v-model="confirmDeleteModal" size="max-w-sm">
           <template #title>

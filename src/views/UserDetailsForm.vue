@@ -40,7 +40,7 @@ function validateForm() {
   }
   if (!userStore.user.age) {
     errors.value.push("Age is required.")
-  }else if(!(userStore.user.age >= 0 && userStore.user.age < 100)){
+  }else if(!(userStore.user.age > 0 && userStore.user.age < 99)){
     errors.value.push("A valid age is required.")
   }
 }
